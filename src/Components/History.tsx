@@ -13,6 +13,7 @@ import { useState } from "react";
 import { MoreVertOutlined } from "@mui/icons-material";
 
 interface Trans {
+  id: number;
   date: string;
   name: string;
   amount: number;
@@ -96,13 +97,13 @@ function History({
             <MenuItem onClick={() => handleClose()}>Clear history</MenuItem>
           </Menu>
         </Grid>
-        <Divider flexItem />
+        <Divider flexItem sx={{ width: "100%" }} />
         <Grid item xs={12} py={1}>
           {transactions.map(
             (trans, index) =>
               index < numberDisplay && (
                 <Transaction
-                  key={trans.date}
+                  key={trans.id}
                   trans={trans}
                   currency={currency}
                   usdrates={usdrates}

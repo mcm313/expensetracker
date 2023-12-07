@@ -37,9 +37,9 @@ function Transaction({ trans, currency, usdrates, jpyrates, phprates }: Props) {
           borderRightWidth: "4px",
         }}
       >
-        <Grid container>
+        <Grid container alignItems="center">
           <Grid item xs={3}>
-            <Typography variant="body2">{trans.date.slice(0, 10)}</Typography>
+            <Typography variant="body2">{trans.date}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography variant="body2">{trans.name}</Typography>

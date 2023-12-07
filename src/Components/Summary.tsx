@@ -11,8 +11,8 @@ interface Props {
 
 function Summary({ income, expense, currency }: Props) {
   return (
-    <Grid item justifyContent="center" py={3} px={2} xs={12}>
-      <Paper elevation={3} sx={{ minWidth: "350px", padding: "10px" }}>
+    <Grid item justifyContent="center" py={3} paddingRight={3} xs={12}>
+      <Paper elevation={3} sx={{ width: "100%", padding: "10px" }}>
         <Grid container>
           <Grid item xs={5.5}>
             <Typography variant="body1" component="div" textAlign="center">

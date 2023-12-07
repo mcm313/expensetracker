@@ -31,7 +31,7 @@ function MenuBar({ selectCurr, currency }: Props) {
 
   return (
     <Grid item xs={12} py={4}>
-      <AppBar position="relative">
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h4" component="div">
             Expense Tracker

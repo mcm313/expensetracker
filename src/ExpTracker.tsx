@@ -8,6 +8,7 @@ import History from "./Components/History";
 import AddTrans from "./Components/AddTrans";
 
 interface Trans {
+  id: number;
   date: string;
   name: string;
   amount: number;
@@ -147,11 +148,23 @@ function ExpTracker() {
 
   function addTransaction(name: string, amount: string, currency: string) {
     const newNumber = Number(amount);
+    const id = Date.now();
     const event = new Date();
-    const date = event.toJSON();
+    const date =
+      event.getFullYear() +
+      "/" +
+      (event.getMonth() + 1) +
+      "/" +
+      event.getDate();
     if (!Number.isNaN(newNumber)) {
       setTransactions([
-        { date: date, name: name, amount: newNumber, currency: currency },
+        {
+          id: id,
+          date: date,
+          name: name,
+          amount: newNumber,
+          currency: currency,
+        },
         ...transactions,
       ]);
     }
@@ -178,7 +191,13 @@ function ExpTracker() {
 
   return (
     <Container fixed>
-      <Grid container px={1} justifyContent="center">
+      <Grid
+        container
+        px={1}
+        justifyContent="center"
+        minWidth={450}
+        overflow="auto"
+      >
         <MenuBar selectCurr={selectCurr} currency={currency} />
         <Balance currency={currency} balance={balance} />
         <Summary income={income} expense={expense} currency={currency} />
