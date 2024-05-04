@@ -12,47 +12,11 @@ interface Trans {
   date: string;
   name: string;
   amount: number;
-  currency: string;
 }
 
 interface Input {
   target: { value: string };
 }
-
-//sample rates from fixed.io
-const usdrates = {
-  success: true,
-  timestamp: 1519296206,
-  base: "USD",
-  date: "2023-12-04",
-  rates: {
-    PHP: 55.39,
-    JPY: 147.28,
-  },
-};
-
-const jpyrates = {
-  success: true,
-  timestamp: 1519296206,
-  base: "USD",
-  date: "2023-12-04",
-  rates: {
-    PHP: 0.38,
-    USD: 0.0068,
-  },
-};
-
-const phprates = {
-  success: true,
-  timestamp: 1519296206,
-  base: "USD",
-  date: "2023-12-04",
-  rates: {
-    USD: 0.018,
-    JPY: 2.66,
-  },
-};
-
 function ExpTracker() {
   const value = localStorage.getItem("transactions");
 
@@ -70,51 +34,14 @@ function ExpTracker() {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
 
-  const [currency, setCurrency] = useState("Peso");
-
   const [inputName, setInputName] = useState("");
   const [inputAmount, setInputAmount] = useState("");
-  const [inputCurrency, setInputCurrency] = useState("Peso");
 
   function computeTotal(type: string): number {
     let total = 0;
     let newTransactions: number[] = [];
 
-    if (currency === "Peso") {
-      transactions.forEach((tran) => {
-        if (tran.currency === "Peso") {
-          newTransactions.push(tran.amount);
-        } else if (tran.currency === "Dollar") {
-          newTransactions.push(tran.amount / phprates.rates.USD);
-        } else if (tran.currency === "Yen") {
-          newTransactions.push(tran.amount / phprates.rates.JPY);
-        }
-      });
-    }
-
-    if (currency === "Dollar") {
-      transactions.forEach((tran) => {
-        if (tran.currency === "Dollar") {
-          newTransactions.push(tran.amount);
-        } else if (tran.currency === "Peso") {
-          newTransactions.push(tran.amount / usdrates.rates.PHP);
-        } else if (tran.currency === "Yen") {
-          newTransactions.push(tran.amount / usdrates.rates.JPY);
-        }
-      });
-    }
-
-    if (currency === "Yen") {
-      transactions.forEach((tran) => {
-        if (tran.currency === "Yen") {
-          newTransactions.push(tran.amount);
-        } else if (tran.currency === "Peso") {
-          newTransactions.push(tran.amount / jpyrates.rates.PHP);
-        } else if (tran.currency === "Dollar") {
-          newTransactions.push(tran.amount / jpyrates.rates.USD);
-        }
-      });
-    }
+    transactions.forEach((tran) => newTransactions.push(tran.amount));
 
     if (type === "income") {
       newTransactions.forEach((tran) => {
@@ -142,11 +69,7 @@ function ExpTracker() {
   const expense: number = computeTotal("expense");
   const balance: number = computeTotal("balance");
 
-  function selectCurr(curr: string) {
-    setCurrency(curr);
-  }
-
-  function addTransaction(name: string, amount: string, currency: string) {
+  function addTransaction(name: string, amount: string) {
     const newNumber = Number(amount);
     const id = Date.now();
     const event = new Date();
@@ -163,14 +86,12 @@ function ExpTracker() {
           date: date,
           name: name,
           amount: newNumber,
-          currency: currency,
         },
         ...transactions,
       ]);
     }
     setInputName("");
     setInputAmount("");
-    setInputCurrency("Peso");
   }
 
   const changeName = ({ target }: Input) => {
@@ -179,10 +100,6 @@ function ExpTracker() {
 
   const changeAmount = ({ target }: Input) => {
     setInputAmount(target.value);
-  };
-
-  const changeCurrency = ({ target }: Input) => {
-    setInputCurrency(target.value);
   };
 
   function handleClear() {
@@ -198,25 +115,16 @@ function ExpTracker() {
         minWidth={450}
         overflow="auto"
       >
-        <MenuBar selectCurr={selectCurr} currency={currency} />
-        <Balance currency={currency} balance={balance} />
-        <Summary income={income} expense={expense} currency={currency} />
-        <History
-          transactions={transactions}
-          currency={currency}
-          handleClear={handleClear}
-          usdrates={usdrates.rates}
-          jpyrates={jpyrates.rates}
-          phprates={phprates.rates}
-        />
+        <MenuBar />
+        <Balance balance={balance} />
+        <Summary income={income} expense={expense} />
+        <History transactions={transactions} handleClear={handleClear} />
         <AddTrans
           addTransaction={addTransaction}
           inputName={inputName}
           inputAmount={inputAmount}
-          inputCurrency={inputCurrency}
           changeName={changeName}
           changeAmount={changeAmount}
-          changeCurrency={changeCurrency}
         />
       </Grid>
     </Container>

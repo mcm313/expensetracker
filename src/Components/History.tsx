@@ -17,26 +17,21 @@ interface Trans {
   date: string;
   name: string;
   amount: number;
-  currency: string;
 }
 
 interface Props {
   transactions: Trans[];
-  currency: string;
   handleClear: () => void;
-  usdrates: { PHP: number; JPY: number };
-  jpyrates: { PHP: number; USD: number };
-  phprates: { USD: number; JPY: number };
 }
 
-function History({
-  transactions,
-  currency,
-  handleClear,
-  usdrates,
-  jpyrates,
-  phprates,
-}: Props) {
+type JSONValue =
+  | boolean
+  | string
+  | number
+  | { [x: string]: JSONValue }
+  | Array<JSONValue>;
+
+function History({ transactions, handleClear }: Props) {
   const [numberDisplay, setNumberDisplay] = useState(5);
 
   function addNumDisplay() {
@@ -102,14 +97,7 @@ function History({
           {transactions.map(
             (trans, index) =>
               index < numberDisplay && (
-                <Transaction
-                  key={trans.id}
-                  trans={trans}
-                  currency={currency}
-                  usdrates={usdrates}
-                  jpyrates={jpyrates}
-                  phprates={phprates}
-                />
+                <Transaction key={trans.id} trans={trans} />
               )
           )}
         </Grid>

@@ -1,23 +1,11 @@
-import {
-  Typography,
-  Grid,
-  Divider,
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { CurrencyYenOutlined, AttachMoneyOutlined } from "@mui/icons-material";
-import Peso from "../currencyicons/peso.png";
+import { Typography, Grid, Divider, TextField, Button } from "@mui/material";
 
 interface Props {
-  addTransaction: (name: string, amount: string, currency: string) => void;
+  addTransaction: (name: string, amount: string) => void;
   inputName: string;
   inputAmount: string;
-  inputCurrency: string;
   changeName: ChangeFunc;
   changeAmount: ChangeFunc;
-  changeCurrency: ChangeFunc;
 }
 
 type ChangeFunc = (target: Input) => void;
@@ -30,10 +18,8 @@ function AddTrans({
   addTransaction,
   inputName,
   inputAmount,
-  inputCurrency,
   changeName,
   changeAmount,
-  changeCurrency,
 }: Props) {
   return (
     <Grid container px={2} py={3}>
@@ -55,22 +41,6 @@ function AddTrans({
         <Typography variant="body1" component="div">
           Amount
         </Typography>
-        <Select
-          displayEmpty
-          value={inputCurrency}
-          onChange={changeCurrency}
-          sx={{ width: "70px" }}
-        >
-          <MenuItem value={"Dollar"}>
-            <AttachMoneyOutlined fontSize="small" />
-          </MenuItem>
-          <MenuItem value={"Peso"}>
-            <img src={Peso} alt="pesoicon" width={15} />
-          </MenuItem>
-          <MenuItem value={"Yen"}>
-            <CurrencyYenOutlined fontSize="small" />
-          </MenuItem>
-        </Select>
         <TextField
           placeholder="Enter value"
           value={inputAmount}
@@ -81,7 +51,7 @@ function AddTrans({
       <Grid item xs={12}>
         <Button
           variant="contained"
-          onClick={() => addTransaction(inputName, inputAmount, inputCurrency)}
+          onClick={() => addTransaction(inputName, inputAmount)}
         >
           Add transaction
         </Button>
